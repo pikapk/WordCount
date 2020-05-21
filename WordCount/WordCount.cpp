@@ -1,20 +1,41 @@
-// WordCount.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include<fstream>
+#include<string>
+#include<vector>
+using namespace std;
+ int CharacterCounter(vector<string>&a) {
+    int counter = 0;
+    for (int i = 0; i < a.size(); i++) {
+        counter += a[i].length();
+    }
+    return counter;
+}
+int WordCounter(vector<string>&a) {
+    int counter = 0;
+    for (int i = 0; i < a.size(); i++) {
+        for (int j = 0; j < a[i].length(); j++) {
+            if (j > 0&&(a[i][j]==' '||a[i][j]==','||a[i][j]=='.')) {    //从第二个字符开始碰到空格或逗号或句号时判断前一个字符是不是上述字符，不是的话就计入一个单词数
+                if (a[i][j - 1] != ' ' || a[i][j - 1] != ',' || a[i][j - 1] != '.') counter++;
+          }
+        }
+    }
+    return counter;
+}
+int main(int argc,char **argv)
+{ 
+    string type = argv[1];
+    ifstream inputfile(argv[2], ios::in);
+    if (!inputfile)return -1;
+    string line;
+    vector<string>linestring;
+    while (getline(inputfile, line))linestring.push_back(line);//一行一行的读入
+    inputfile.close();
+    if (type == "-c")cout<<CharacterCounter(linestring);//计算字符数
+    else if (type == "-w")cout<<WordCounter(linestring);//计算单词数
+    else cout<<-1;
+  
+    return 0;
 
-int main()
-{
-    std::cout << "Hello World!\n";
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
